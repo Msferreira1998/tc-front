@@ -1,29 +1,36 @@
 <template>
-  <div>
-    <v-data-table-virtual
-      :headers="headers"
-      :items="items"
-      height="400"
-      item-value="name"
-      :loading="loading"
-    >
-      <template #item.actions="{ item }">
-        <div>
-          <v-btn
-            v-for="(action, index) in item.actions"
-            :key="index"
-            :icon="action.icon"
-            :color="action.color"
-            :disabled="action.disabled"
-            size="small"
-            @click="action.onClick(item)"
-            class="mx-1"
-          >
-          </v-btn>
-        </div>
-      </template>
-    </v-data-table-virtual>
-  </div>
+  <v-data-table
+    :headers="headers"
+    :items="items"
+    item-value="name"
+    :loading="dataLoading"
+    loading-text="Loading... Please wait"
+    :items-per-page="5"
+    class="elevation-1"
+    density="compact"
+  >
+    <template #item.completed="{ item }">
+      <v-icon :color="item.completed ? 'success' : 'error'">
+        {{ item.completed ? 'mdi-check-circle' : 'mdi-close-circle' }}
+      </v-icon>
+    </template>
+
+    <template #item.actions="{ item }">
+      <div>
+        <v-icon
+          v-for="(action, index) in item.actions"
+          :key="index"
+          :color="action.color"
+          :disabled="action.disabled"
+          small
+          class="mr-1"
+          @click="action.onClick"
+        >
+          {{ action.icon }}
+        </v-icon>
+      </div>
+    </template>
+  </v-data-table>
 </template>
 
 <script>
@@ -51,6 +58,9 @@ export default {
       if (this.actions.length > 0) {
         return this.actions;
       }
+    },
+    dataLoading() {
+      return this.loading;
     },
   },
 };
