@@ -1,7 +1,6 @@
 import { createStore } from 'vuex';
 import api from '../api/api';
 
-// Create a new store instance.
 export default createStore({
   state() {
     return {

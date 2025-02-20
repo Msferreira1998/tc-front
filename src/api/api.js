@@ -1,9 +1,8 @@
 import axios from 'axios';
 
-// Cria uma instância do Axios com configurações padrão
 const instance = axios.create({
-  baseURL: 'https://jsonplaceholder.typicode.com', // URL base da API
-  timeout: 10000, // Tempo limite para requisições
+  baseURL: 'https://jsonplaceholder.typicode.com',
+  timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
   },

@@ -1,24 +1,18 @@
 <template>
   <v-app>
     <v-main>
-      <v-container>
-        <v-dialog v-model="dialog" persistent max-width="800px">
-          <TodoForm
-            :item="todoItem"
-            @onSubmit="onSubmit"
-            @onCancel="onCancel"
-          />
-        </v-dialog>
+      <v-dialog v-model="dialog" persistent max-width="800px">
+        <TodoForm :item="todoItem" @onSubmit="onSubmit" @onCancel="onCancel" />
+      </v-dialog>
 
-        <DataTable
-          :headers="headers"
-          :items="todoList"
-          :loading="tableLoading"
-          @onEdit="onEdit"
-          @onSearch="onSearch"
-          @onAdd="onAdd"
-        />
-      </v-container>
+      <DataTable
+        :headers="headers"
+        :items="todoList"
+        :loading="tableLoading"
+        @onEdit="onEdit"
+        @onSearch="onSearch"
+        @onAdd="onAdd"
+      />
     </v-main>
   </v-app>
 </template>
@@ -162,5 +156,3 @@ export default {
   },
 };
 </script>
-
-<style></style>
