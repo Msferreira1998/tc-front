@@ -1,13 +1,22 @@
-<
 <template>
   <v-app>
     <v-main>
       <v-container>
+        <v-dialog v-model="dialog" persistent max-width="800px">
+          <TodoForm
+            :item="todoItem"
+            @onSubmit="onSubmit"
+            @onCancel="onCancel"
+          />
+        </v-dialog>
+
         <DataTable
           :headers="headers"
           :items="todoList"
           :loading="tableLoading"
           @onEdit="onEdit"
+          @onSearch="onSearch"
+          @onAdd="onAdd"
         />
       </v-container>
     </v-main>
@@ -16,16 +25,19 @@
 
 <script>
 import DataTable from '../components/DataTable.vue';
+import TodoForm from '../components/TodoForm.vue';
 export default {
   name: 'ListagemData',
   components: {
     DataTable,
+    TodoForm,
   },
   data() {
     return {
+      dialog: false,
       tableLoading: false,
       headers: [
-        { title: 'Title', align: 'start', key: 'title' },
+        { title: 'Title', align: 'start', key: 'title', width: 350 },
         {
           title: 'Completed',
           align: 'center',
@@ -42,8 +54,33 @@ export default {
       await fn();
       this.tableLoading = false;
     },
+    onSubmit(todo) {
+      if (todo.id) {
+        this.$store.dispatch('updateTodo', todo);
+        this.$swal('Atualizado!', 'Seu arquivo foi atualizado.', 'success');
+      } else {
+        todo.id = this.$store.getters.todoList.length + 1;
+        this.$store.dispatch('createTodo', todo);
+        this.$swal('Criado!', 'Seu arquivo foi criado.', 'success');
+      }
+
+      this.$store.dispatch('cleanTodoItem');
+      this.dialog = false;
+    },
+    onSearch(value) {
+      this.$store.dispatch('searchTodo', value);
+    },
+    onAdd() {
+      this.$store.dispatch('cleanTodoItem');
+      this.dialog = true;
+    },
+    onCancel() {
+      this.$store.dispatch('cleanTodoItem');
+      this.dialog = false;
+    },
     onEdit(item) {
-      //
+      this.$store.dispatch('fetchTodoItem', item.id);
+      this.dialog = true;
     },
     onDelete(item) {
       this.$swal({
@@ -82,7 +119,10 @@ export default {
   },
   computed: {
     todoList() {
-      const todoList = this.$store.getters.todoList;
+      const todoList = this.$store.getters.filteredList;
+      if (!todoList.length) {
+        return [];
+      }
       todoList.forEach((item) => {
         item.actions = [
           {
@@ -110,6 +150,9 @@ export default {
       });
 
       return todoList;
+    },
+    todoItem() {
+      return this.$store.getters.todoItem;
     },
   },
   mounted() {

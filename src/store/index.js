@@ -7,14 +7,20 @@ export default createStore({
     return {
       todoList: [],
       todoItem: {},
+      filteredList: [],
     };
   },
   getters: {
     todoList: (state) => state.todoList,
+    todoItem: (state) => state.todoItem,
+    filteredList: (state) => state.filteredList,
   },
   mutations: {
     SET_TODO_LIST(state, list) {
       state.todoList = list;
+    },
+    SET_FILTERED_LIST(state, list) {
+      state.filteredList = list;
     },
     SET_TODO_ITEM(state, item) {
       state.todoItem = item;
@@ -27,6 +33,9 @@ export default createStore({
         state.todoList[index] = item;
       }
     },
+    CREATE_TODO_ITEM(state, item) {
+      state.todoList.unshift(item);
+    },
     DELETE_TODO_ITEM(state, id) {
       const index = state.todoList.findIndex((todoItem) => todoItem.id === id);
       if (index !== -1) {
@@ -37,42 +46,58 @@ export default createStore({
   actions: {
     async fetchTodos({ commit }) {
       try {
+        if (this.state.todoList.length > 0) {
+          return;
+        }
         const response = await api.get('/todos');
         const itensDt = response.data;
 
         commit('SET_TODO_LIST', itensDt);
+        commit('SET_FILTERED_LIST', itensDt);
       } catch (error) {
         console.error('Erro ao buscar a lista de tarefas:', error);
       }
     },
-    async fetchTodoItem({ commit }, id) {
+    fetchTodoItem({ commit }, id) {
       try {
-        const response = await api.get(`/todos/${id}`);
-        const itemDt = response.data;
+        const index = this.state.todoList.findIndex(
+          (todoItem) => todoItem.id === id
+        );
+        const itemDt = this.state.todoList[index];
         commit('SET_TODO_ITEM', itemDt);
       } catch (error) {
         console.error('Erro ao buscar a lista de tarefas:', error);
       }
     },
-    async createTodo({ commit }, todoItem) {
+    cleanTodoItem({ commit }) {
+      commit('SET_TODO_ITEM', {});
+    },
+    searchTodo({ commit }, searchTerm) {
+      if (!searchTerm) {
+        commit('SET_FILTERED_LIST', this.state.todoList);
+        return;
+      }
+      const filteredList = this.state.todoList.filter((todoItem) =>
+        todoItem.title.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      commit('SET_FILTERED_LIST', filteredList);
+    },
+    createTodo({ commit }, todoItem) {
       try {
-        // await api.post('/todos', todoItem);
-        commit('SET_TODO_ITEM', response.data);
+        commit('CREATE_TODO_ITEM', todoItem);
       } catch (error) {
         console.error('Erro ao criar a tarefa:', error);
       }
     },
-    async updateTodo({ commit }, todoItem) {
+    updateTodo({ commit }, todoItem) {
       try {
-        // await api.put(`/todos/${todoItem.id}`, todoItem);
         commit('UPDATE_TODO_ITEM', todoItem);
       } catch (error) {
         console.error('Erro ao atualizar a tarefa:', error);
       }
     },
-    async deleteTodo({ commit }, id) {
+    deleteTodo({ commit }, id) {
       try {
-        // await api.delete(`/todos/${id}`);
         commit('DELETE_TODO_ITEM', id);
       } catch (error) {
         console.error('Erro ao excluir a tarefa:', error);

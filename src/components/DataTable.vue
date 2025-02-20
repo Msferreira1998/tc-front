@@ -1,36 +1,59 @@
 <template>
-  <v-data-table
-    :headers="headers"
-    :items="items"
-    item-value="name"
-    :loading="dataLoading"
-    loading-text="Loading... Please wait"
-    :items-per-page="5"
-    class="elevation-1"
-    density="compact"
-  >
-    <template #item.completed="{ item }">
-      <v-icon :color="item.completed ? 'success' : 'error'">
-        {{ item.completed ? 'mdi-check-circle' : 'mdi-close-circle' }}
-      </v-icon>
-    </template>
+  <div class="table-container">
+    <v-data-table
+      :headers="headers"
+      :items="items"
+      :loading="dataLoading"
+      loading-text="Loading... Please wait"
+      class="elevation-1 full-height-table"
+      density="compact"
+      :items-per-page="10"
+      :items-per-page-options="[10, 25, 50, 100]"
+    >
+      <template #top>
+        <v-toolbar flat>
+          <v-toolbar-title>Todo:</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-text-field
+            v-model="search"
+            append-inner-icon="mdi-magnify"
+            label="Search"
+            density="compact"
+            hide-details
+            single-line
+            class="mt-4"
+          ></v-text-field>
+          <v-divider class="mx-4" inset vertical></v-divider>
+          <v-btn color="primary" dark class="mb-2" @click="onAdd">
+            <v-icon left>mdi-plus</v-icon>
+            Add
+          </v-btn>
+        </v-toolbar>
+      </template>
 
-    <template #item.actions="{ item }">
-      <div>
-        <v-icon
-          v-for="(action, index) in item.actions"
-          :key="index"
-          :color="action.color"
-          :disabled="action.disabled"
-          small
-          class="mr-1"
-          @click="action.onClick"
-        >
-          {{ action.icon }}
+      <template #item.completed="{ item }">
+        <v-icon :color="item.completed ? 'success' : 'error'">
+          {{ item.completed ? 'mdi-check-circle' : 'mdi-close-circle' }}
         </v-icon>
-      </div>
-    </template>
-  </v-data-table>
+      </template>
+
+      <template #item.actions="{ item }">
+        <div>
+          <v-icon
+            v-for="(action, index) in item.actions"
+            :key="index"
+            :color="action.color"
+            :disabled="action.disabled"
+            small
+            class="mr-1"
+            @click="action.onClick"
+          >
+            {{ action.icon }}
+          </v-icon>
+        </div>
+      </template>
+    </v-data-table>
+  </div>
 </template>
 
 <script>
@@ -51,19 +74,37 @@ export default {
     },
   },
   data() {
-    return {};
+    return {
+      search: '',
+    };
+  },
+  methods: {
+    onAdd() {
+      this.$emit('onAdd');
+    },
   },
   computed: {
-    tableActions() {
-      if (this.actions.length > 0) {
-        return this.actions;
-      }
-    },
     dataLoading() {
       return this.loading;
+    },
+  },
+  watch: {
+    search(value) {
+      this.$emit('onSearch', value);
     },
   },
 };
 </script>
 
-<style></style>
+<style scoped>
+.table-container {
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.full-height-table {
+  flex: 1;
+  overflow-y: auto;
+}
+</style>
