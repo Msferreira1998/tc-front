@@ -45,9 +45,6 @@ export default createStore({
   actions: {
     async fetchTodos({ commit }) {
       try {
-        if (this.state.todoList.length > 0) {
-          return;
-        }
         const response = await api.get('/todos');
         const itensDt = response.data;
 
@@ -62,6 +59,8 @@ export default createStore({
         const index = this.state.todoList.findIndex(
           (todoItem) => todoItem.id === id
         );
+        // const response = api.get(`/todos/${id}`);
+        // const responseDt = response.data;
         const itemDt = this.state.todoList[index];
         commit('SET_TODO_ITEM', itemDt);
       } catch (error) {
@@ -83,6 +82,8 @@ export default createStore({
     },
     createTodo({ commit }, todoItem) {
       try {
+        // const response = api.post('/todos', todoItem);
+        // const responseDt = response.data;
         commit('CREATE_TODO_ITEM', todoItem);
       } catch (error) {
         console.error('Erro ao criar a tarefa:', error);
@@ -90,6 +91,8 @@ export default createStore({
     },
     updateTodo({ commit }, todoItem) {
       try {
+        // const response = api.put(`/todos/${todoItem.id}`, todoItem);
+        // const responseDt = response.data;
         commit('UPDATE_TODO_ITEM', todoItem);
       } catch (error) {
         console.error('Erro ao atualizar a tarefa:', error);
@@ -97,6 +100,7 @@ export default createStore({
     },
     deleteTodo({ commit }, id) {
       try {
+        // await api.delete(`/todos/${id}`);
         commit('DELETE_TODO_ITEM', id);
       } catch (error) {
         console.error('Erro ao excluir a tarefa:', error);
