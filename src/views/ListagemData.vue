@@ -1,19 +1,17 @@
 <template>
   <v-app>
-    <v-main>
-      <v-dialog v-model="dialog" persistent max-width="800px">
-        <TodoForm :item="todoItem" @onSubmit="onSubmit" @onCancel="onCancel" />
-      </v-dialog>
+    <v-dialog v-model="dialog" persistent max-width="800px">
+      <TodoForm :item="todoItem" @onSubmit="onSubmit" @onCancel="onCancel" />
+    </v-dialog>
 
-      <DataTable
-        :headers="headers"
-        :items="todoList"
-        :loading="tableLoading"
-        @onEdit="onEdit"
-        @onSearch="onSearch"
-        @onAdd="onAdd"
-      />
-    </v-main>
+    <DataTable
+      :headers="headers"
+      :items="todoList"
+      :loading="tableLoading"
+      @onEdit="onEdit"
+      @onSearch="onSearch"
+      @onAdd="onAdd"
+    />
   </v-app>
 </template>
 
@@ -72,11 +70,11 @@ export default {
       this.$store.dispatch('cleanTodoItem');
       this.dialog = false;
     },
-    onEdit(item) {
-      this.$store.dispatch('fetchTodoItem', item.id);
+    onEdit({ id }) {
+      this.$store.dispatch('fetchTodoItem', id);
       this.dialog = true;
     },
-    onDelete(item) {
+    onDelete({ id }) {
       this.$swal({
         title: 'Você tem certeza?',
         text: 'Você não poderá reverter isso!',
@@ -88,24 +86,24 @@ export default {
         cancelButtonText: 'Cancelar',
       }).then((result) => {
         if (result.isConfirmed) {
-          this.$store.dispatch('deleteTodo', item.id);
+          this.$store.dispatch('deleteTodo', id);
           this.$swal('Excluído!', 'Seu arquivo foi excluído.', 'success');
         }
       });
     },
-    onComplete(item) {
+    onComplete({ completed, id, title, userId }) {
       this.$swal({
         title: 'Você tem certeza?',
-        icon: item.completed ? 'warning' : 'success',
+        icon: completed ? 'warning' : 'success',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: item.completed ? 'Sim, desmarcar!' : 'Sim, marcar!',
+        confirmButtonText: completed ? 'Sim, desmarcar!' : 'Sim, marcar!',
         cancelButtonText: 'Cancelar',
       }).then((result) => {
         if (result.isConfirmed) {
-          item.completed = !item.completed;
-          this.$store.dispatch('updateTodo', item);
+          completed = !completed;
+          this.$store.dispatch('updateTodo', { id, title, completed, userId });
           this.$swal('Concluído!', 'Seu arquivo foi concluído.', 'success');
         }
       });

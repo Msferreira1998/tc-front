@@ -10,12 +10,14 @@
     :items-per-page="10"
     :items-per-page-options="[10, 25, 50, 100]"
     style="height: 100vh"
+    data-cy="todo-table"
   >
     <template #top>
       <v-toolbar flat>
         <v-toolbar-title>Todo:</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-text-field
+          data-cy="search-input"
           v-model="search"
           append-inner-icon="mdi-magnify"
           label="Search"
@@ -25,7 +27,13 @@
           class="mt-4"
         ></v-text-field>
         <v-divider class="mx-4" inset vertical></v-divider>
-        <v-btn color="primary" dark class="mb-2" @click="onAdd">
+        <v-btn
+          color="primary"
+          dark
+          class="mb-2"
+          @click="onAdd"
+          data-cy="add-button"
+        >
           <v-icon left>mdi-plus</v-icon>
           Add
         </v-btn>
@@ -47,7 +55,8 @@
           :disabled="action.disabled"
           small
           class="mr-1"
-          @click="action.onClick"
+          @click="action.onClick(item)"
+          :data-cy="`${action.text}-button-${item.id}`"
         >
           {{ action.icon }}
         </v-icon>

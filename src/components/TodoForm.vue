@@ -1,9 +1,15 @@
 <template>
   <div>
-    <v-form ref="form" class="form-container">
+    <v-form
+      ref="form"
+      class="form-container"
+      data-cy="todo-form"
+      v-model="valid"
+    >
       <v-row>
         <v-col cols="12" md="6">
           <v-text-field
+            data-cy="title-input"
             v-model="title"
             label="Title"
             :rules="[(v) => !!v || 'Title is required']"
@@ -15,6 +21,7 @@
         </v-col>
         <v-col cols="12" md="6">
           <v-text-field
+            data-cy="user-id-input"
             v-model="userId"
             type="number"
             label="User ID"
@@ -29,11 +36,16 @@
 
       <v-row class="actions-row">
         <v-col cols="12" class="text-right">
-          <v-btn color="error" @click="onCancel" class="mr-3">
+          <v-btn
+            color="error"
+            @click="onCancel"
+            class="mr-3"
+            data-cy="cancel-button"
+          >
             <v-icon left>mdi-close</v-icon>
             Cancel
           </v-btn>
-          <v-btn color="primary" @click="onSubmit">
+          <v-btn color="primary" @click="onSubmit" data-cy="submit-button">
             <v-icon left>mdi-check</v-icon>
             Submit
           </v-btn>
@@ -58,15 +70,16 @@ export default {
       id: null,
       title: '',
       userId: null,
+      valid: false,
     };
   },
   methods: {
     onSubmit() {
-      if (this.$refs.form.validate()) {
+      if (this.valid) {
         const todo = {
           id: this.id,
           title: this.title,
-          userId: this.userId,
+          userId: Number(this.userId),
           completed: false,
         };
         this.$emit('onSubmit', todo);
