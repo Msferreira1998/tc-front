@@ -32,38 +32,38 @@ Siga as instruções abaixo para configurar e executar o projeto localmente.
    yarn install
    ```
 
-### 🛠️ Scripts disponíveis
+## 🛠️ Scripts disponíveis
 
-## Desenvolvimento
+### Desenvolvimento
 
 - `npm run dev` ou `yarn dev`: Inicia o servidor de desenvolvimento.
   - Aplicação disponível em http://localhost:5173.
 
-## Build
+### Build
 
 - `npm run build` ou `yarn build`: Compila o projeto para produção.
   - Os arquivos estão disponíveis na pasta `dist`.
 
-## Visualização do Build
+### Visualização do Build
 
 - `npm run preview` ou `yarn preview`: Inicia um servidor de visualização do build.
   - A aplicação está disponível em http://localhost:4173.
 
-## Testes
+### Testes
 
 - `npm run test` ou `yarn test`: Executa os testes unitários com Vitest.
 - `npm run coverage` ou `yarn coverage`: Gera o relatório de cobertura de testes.
 - `npm run test:e2e` ou `yarn test:e2e`: Executa os testes end-to-end com Cypress.
 
-## Storybook
+### Storybook
 
 - `npm run storybook` ou `yarn storybook`: Inicia o Storybook para visualização de componentes.
   - A aplicação está disponível em http://localhost:6006.
 - `npm run build-storybook` ou `yarn build-storybook`: Compila o Storybook para produção.
 
-### 🧪 Testes
+## 🧪 Testes
 
-## Testes Unitários (Vitest)
+### Testes Unitários (Vitest)
 
 Os testes unitários estão localizados na pasta `tests`.
 
@@ -79,7 +79,7 @@ Para gerar o relatório de cobertura de testes:
 npm run coverage
 ```
 
-## Testes End-to-End (Cypress)
+### Testes End-to-End (Cypress)
 
 Os testes end-to-end estão localizados na pasta `cypress/e2e`.
 
@@ -91,7 +91,7 @@ npm run test:e2e
 
 Isso abrirá a interface do Cypress para executar os testes.
 
-### 📚 Storybook
+## 📚 Storybook
 
 O Storybook é utilizado para documentar e visualizar componentes do projeto.
 
@@ -107,4 +107,4 @@ Para gerar o build do Storybook:
 npm run build-storybook
 ```
 
-### Feito com ❤️ por [Matheus Ferreira](https://github.com/Msferreira1998)
+## Feito com ❤️ por [Matheus Ferreira](https://github.com/Msferreira1998)
